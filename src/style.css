@@ -1,53 +1,179 @@
+:root {
+    /* 🎨 COLOR SETTINGS — change these to restyle the carousel */
+    --bg-card: hsl(208, 55%, 50%); /* Main accent color */
+    --bg-card-overlay: hsl(from var(--bg-card) h s l / 0.2); /* Background tint overlay */
+    --text-card: hsl(from var(--bg-card) h s l / 0.9); /* Text color overlay */
+    --scroll-btn-bg: hsl(from var(--bg-card) h s l / 0.5); /* Scroll button background */
+    --box-shadow-carousal-p: 11px 8px 0px 0px hsl(from var(--bg-card) h s l / 0.3); /* Card shadow color */
+
+    /* 📐 DIMENSIONS — adjust layout proportions and spacing */
+    --body-height: 100vh;
+    --body-width: 100vw;
+    --para-width: 50%; /* Carousel width on screen */
+    --aspect-ratio: 1 / 0.8; /* Carousel height ratio */
+
+    /* 📏 SPACING — tweak gaps, padding, and border radius */
+    --gap-main: 1rem; /* Space between grid elements */
+    --gap-content: 3rem; /* Space between inner content */
+    --padding-content: 1rem; /* Padding inside each slide */
+    --border-radius: 1rem; /* Rounded corners for cards */
+
+    /* ⏺️ SCROLL BUTTON — adjust look & size of scroll arrows */
+    --scroll-btn-min: 32px;
+    --scroll-btn-ideal: 42px;
+    --scroll-btn-max: 52px;
+    --scroll-btn-border: 1px solid;
+    --scroll-btn-font: 1rem;
+    --scroll-btn-margin: -0.5rem 0.5rem 0.5rem 0.5rem; /* Button spacing */
+
+    /* 🧭 LAYOUT GRID — modify if you want to rearrange structure */
+    --grid-rows: 1fr auto;
+    --grid-columns: auto 1fr auto;
+}
+
+/* RESET — keeps layout consistent across browsers */
 *,
 *::before,
 *::after {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    color-scheme: dark;
+    color-scheme: light dark;
     font-family: system-ui;
 }
 
+/* BODY — centers everything on screen */
 body {
-    height: 100vh;
-    width: 100vw;
+    height: var(--body-height);
+    width: var(--body-width);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
-img {
-    height: 90vh;
-}
-.carousel {
+
+/* CONTAINER — main frame for carousel and controls */
+.para-div {
+    border: 0.3px solid;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-carousal-p);
+    width: var(--para-width);
     display: grid;
-    grid-auto-columns: 70%;
+    grid-template-areas:
+        'scroll scroll scroll'
+        'left markers right';
+    grid-template-rows: var(--grid-rows);
+    grid-template-columns: var(--grid-columns);
+    aspect-ratio: var(--aspect-ratio);
+    gap: var(--gap-main);
+}
+
+/* SCROLL AREA — contains carousel items */
+.carousel-p {
+    grid-area: scroll;
+    display: grid;
     grid-auto-flow: column;
-
+    grid-auto-columns: 100%;
     overflow-x: auto;
-    scroll-snap-align: x mandatory;
+    scroll-snap-type: x mandatory;
+    scrollbar-color: var(--bg-card) var(--bg-card-overlay);
+    scrollbar-width: thin;
 
-    padding: 1rem;
-    margin: 5rem;
-    border: 1rem solid white;
+    @media (prefers-reduced-motion: no-preference) {
+        scroll-behavior: smooth;
+    }
+
     > li {
         list-style: none;
         scroll-snap-align: center;
-        padding: 1rem;
     }
-    > img {
+}
+
+/* SLIDES — customize look of each carousel item */
+.carousel-p li {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--gap-content);
+    padding: var(--padding-content);
+    background: var(--bg-card-overlay);
+    color: var(--text-card);
+    height: 100%;
+    text-align: center;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+
+    &:first-child {
+        text-align: left;
+    }
+    &:last-child {
+        text-align: right;
+    }
+}
+
+/* SCROLL BUTTONS — adjust appearance or shape here */
+.carousel-p {
+    &::scroll-button(*) {
+        border-radius: 100%;
+        width: clamp(var(--scroll-btn-min), var(--scroll-btn-ideal), var(--scroll-btn-max));
+        aspect-ratio: 1 / 1;
+        border: var(--scroll-btn-border);
+        font-size: var(--scroll-btn-font);
+        background-color: var(--scroll-btn-bg);
+        margin: var(--scroll-btn-margin);
+    }
+
+    &::scroll-button(right) {
+        content: '⮕' / 'Scroll Right';
+        grid-area: right;
+    }
+
+    &::scroll-button(left) {
+        content: '⬅' / 'Scroll Left';
+        grid-area: left;
+    }
+}
+
+/* MARKERS — the dots under the carousel */
+.carousel-p {
+    scroll-marker-group: after;
+
+    &::scroll-marker-group {
+        grid-area: markers;
+        margin: var(--scroll-btn-margin);
+        display: grid;
+        place-content: safe center;
+        gap: var(--gap-main);
+        padding: var(--padding-content);
+        grid: 30px / auto-flow 30px;
+        overflow: auto;
+        overscroll-behavior-x: contain;
+        scrollbar-width: none;
+        scroll-snap-type: x mandatory;
+
+        @media (prefers-reduced-motion: no-preference) {
+            scroll-behavior: smooth;
+        }
+    }
+}
+
+/* INDIVIDUAL MARKERS — change size, color, or border here */
+.content > li {
+    &::scroll-marker {
+        content: ' ';
+        border: var(--scroll-btn-border) var(--bg-card);
+        border-radius: 50%;
+        outline-offset: 4px;
+        -webkit-tap-highlight-color: transparent;
         scroll-snap-align: center;
     }
-    &::scroll-button(left) {
-        content: '◀';
-        background-color: #333;
-        color: white;
-        border: none;
-        padding: 10px;
-        cursor: pointer;
+
+    &::scroll-marker:is(:hover, :focus-visible) {
+        border-color: var(--bg-card);
+        background: var(--scroll-btn-bg);
     }
-    &::scroll-button(right) {
-        content: '▶';
-        background-color: #333;
-        color: white;
-        border: none;
-        padding: 10px;
-        cursor: pointer;
+
+    &::scroll-marker:target-current {
+        background: var(--bg-card);
+        border-color: var(--bg-card);
     }
 }
