@@ -95,8 +95,8 @@ Note: These selectors are experimental and may change or be unsupported in other
 Clone the repository and open the demo:
 
 ```bash
-git clone https://github.com/<your-username>/carousels-with-css.git
-cd carousels-with-css
+git clone [git@github.com:aayusht200/carousels-css.git](https://github.com/aayusht200/carousels-css.git)
+cd carousels-css
 # Open index.html in your browser (for best results use Chrome Canary)
 ```
 
