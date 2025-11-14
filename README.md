@@ -114,7 +114,7 @@ To customize:
 -   Use CSS variables for theming and responsive tweaks.
 -   The layout uses CSS Grid for the carousel frame and `scroll-snap` for smooth snapping between slides.
 -   If copying slides or switching to images, ensure images are sized and have `object-fit` set to maintain consistent aspect ratio.
-
+-   Check Solution for images version in images.css, although its a large file it can easily be compressed into a smaller file due to repeating elements.
 ---
 
 ## References
