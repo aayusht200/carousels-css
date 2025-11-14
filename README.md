@@ -4,7 +4,8 @@ A fully functional **carousel built entirely with CSS** — no JavaScript requir
 This project demonstrates the power of modern CSS scroll-linked features like `::scroll-button` and `::scroll-marker`.
 
 ---
-
+## Preview
+<img width="1920" height="1670" alt="Sample with image Carousel" src="https://github.com/user-attachments/assets/9d4002e0-154a-4559-862b-9566c33f30d4" />
 ## 🚀 Features
 
 -   100% **CSS-powered** carousel (no JS)
@@ -116,6 +117,8 @@ To customize:
 -   If copying slides or switching to images, ensure images are sized and have `object-fit` set to maintain consistent aspect ratio.
 -   Check Solution for images version in images.css, although its a large file it can easily be compressed into a smaller file due to repeating elements.
 ---
+
+
 
 ## References
 
