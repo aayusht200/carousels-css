@@ -1,3 +1,5 @@
+/* With .image-carousel solution */
+
 :root {
     /* 🎨 COLOR SETTINGS — change these to restyle the carousel */
     --bg-card: hsl(208, 55%, 50%); /* Main accent color */
@@ -15,7 +17,7 @@
     /* 📏 SPACING — tweak gaps, padding, and border radius */
     --gap-main: 1rem; /* Space between grid elements */
     --gap-content: 3rem; /* Space between inner content */
-    --padding-content: 0.8rem; /* Padding inside each slide */
+    --padding-content: 1rem; /* Padding inside each slide */
     --border-radius: 1rem; /* Rounded corners for cards */
 
     /* ⏺️ SCROLL BUTTON — adjust look & size of scroll arrows */
@@ -24,7 +26,7 @@
     --scroll-btn-max: 52px;
     --scroll-btn-border: 1px solid;
     --scroll-btn-font: 1rem;
-    --scroll-btn-margin: 0 1rem 0 1rem; /* Button spacing */
+    --scroll-btn-margin: -0.5rem 0.5rem 0.5rem 0.5rem; /* Button spacing */
 
     /* 🧭 LAYOUT GRID — modify if you want to rearrange structure */
     --grid-rows: 1fr auto;
@@ -46,17 +48,18 @@
 body {
     height: var(--body-height);
     width: var(--body-width);
+    display: flex;
 }
 .container {
-    height: inherit;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr;
+    place-items: center;
+    gap: 20%;
 }
-
 /* CONTAINER — main frame for carousel and controls */
 .para-div {
+    justify-self: center;
     border: 0.3px solid;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow-carousal-p);
@@ -142,6 +145,7 @@ body {
 
     &::scroll-marker-group {
         grid-area: markers;
+        margin: var(--scroll-btn-margin);
         display: grid;
         place-content: safe center;
         gap: var(--gap-main);
@@ -151,6 +155,7 @@ body {
         overscroll-behavior-x: contain;
         scrollbar-width: none;
         scroll-snap-type: x mandatory;
+
         @media (prefers-reduced-motion: no-preference) {
             scroll-behavior: smooth;
         }
@@ -159,6 +164,112 @@ body {
 
 /* INDIVIDUAL MARKERS — change size, color, or border here */
 .content > li {
+    &::scroll-marker {
+        content: ' ';
+        border: var(--scroll-btn-border) var(--bg-card);
+        border-radius: 50%;
+        outline-offset: 4px;
+        -webkit-tap-highlight-color: transparent;
+        scroll-snap-align: center;
+    }
+
+    &::scroll-marker:is(:hover, :focus-visible) {
+        border-color: var(--bg-card);
+        background: var(--scroll-btn-bg);
+    }
+
+    &::scroll-marker:target-current {
+        background: var(--bg-card);
+        border-color: var(--bg-card);
+    }
+}
+
+.image-container {
+    border: 0.3px solid;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-carousal-p);
+    width: var(--para-width);
+    display: grid;
+    grid-template-areas:
+        'scroll scroll scroll'
+        'left markers right';
+    grid-template-rows: var(--grid-rows);
+    grid-template-columns: var(--grid-columns);
+    aspect-ratio: var(--aspect-ratio);
+    gap: var(--gap-main);
+}
+.image-carousel {
+    grid-area: scroll;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-color: var(--bg-card) var(--bg-card-overlay);
+    scrollbar-width: thin;
+
+    @media (prefers-reduced-motion: no-preference) {
+        scroll-behavior: smooth;
+    }
+
+    > img {
+        max-width: 100%;
+        min-width: 100%;
+        max-height: 100%;
+        min-height: 100%;
+        scroll-snap-align: center;
+        border-radius: var(--border-radius);
+    }
+}
+
+/* SCROLL BUTTONS — adjust appearance or shape here */
+.image-carousel {
+    &::scroll-button(*) {
+        border-radius: 100%;
+        width: clamp(var(--scroll-btn-min), var(--scroll-btn-ideal), var(--scroll-btn-max));
+        aspect-ratio: 1 / 1;
+        border: var(--scroll-btn-border);
+        font-size: var(--scroll-btn-font);
+        background-color: var(--scroll-btn-bg);
+        margin: var(--scroll-btn-margin);
+    }
+
+    &::scroll-button(right) {
+        content: '⮕' / 'Scroll Right';
+        grid-area: right;
+    }
+
+    &::scroll-button(left) {
+        content: '⬅' / 'Scroll Left';
+        grid-area: left;
+    }
+}
+
+/* MARKERS — the dots under the carousel */
+.image-carousel {
+    scroll-marker-group: after;
+
+    &::scroll-marker-group {
+        grid-area: markers;
+        margin: var(--scroll-btn-margin);
+        display: grid;
+        place-content: safe center;
+        gap: var(--gap-main);
+        padding: var(--padding-content);
+        grid: 30px / auto-flow 30px;
+        overflow: auto;
+        overscroll-behavior-x: contain;
+        scrollbar-width: none;
+        scroll-snap-type: x mandatory;
+
+        @media (prefers-reduced-motion: no-preference) {
+            scroll-behavior: smooth;
+        }
+    }
+}
+
+/* INDIVIDUAL MARKERS — change size, color, or border here */
+.image-carousel > img {
     &::scroll-marker {
         content: ' ';
         border: var(--scroll-btn-border) var(--bg-card);
